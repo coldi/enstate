@@ -30,8 +30,33 @@ export default class StateProvider extends React.Component {
 
     constructor (props) {
         super(props);
-        this.state = props.initialState;
         this.dispatch = makeDispatcher(this);
+        this.state = props.initialState;
+        // manage a pending state due to the fact that
+        // setState does not work in a synchronous way.
+        this.pendingState = this.state;
+        this.getState = () => this.pendingState;
+        const setReactState = this.setState.bind(this);
+        // hook into setState and perform an update to our pending state.
+        this.setState = (...args) => {
+            const [firstArg, callback] = args;
+
+            let stateUpdate;
+            if (typeof firstArg === 'function') {
+                stateUpdate = firstArg(this.pendingState);
+            } else if (typeof firstArg === 'object' && firstArg !== null) {
+                stateUpdate = firstArg;
+            }
+
+            this.pendingState = { ...this.pendingState, ...stateUpdate };
+
+            // call original setState and catch up with the component's state.
+            setReactState(firstArg, () => {
+                this.pendingState = this.state;
+                if (callback) callback();
+            });
+        };
+
         this.middleware = combineMiddlewares(this)([
             ...props.middlewares,
             actionMiddleware,
@@ -41,7 +66,8 @@ export default class StateProvider extends React.Component {
     provideContext () {
         return {
             dispatch: this.dispatch,
-            state: this.state, // TODO: getState() instead?
+            state: this.state,
+            getState: this.getState,
         };
     }
 
