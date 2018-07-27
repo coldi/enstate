@@ -127,16 +127,6 @@
     };
   }();
 
-  var toConsumableArray = function (arr) {
-    if (Array.isArray(arr)) {
-      for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) arr2[i] = arr[i];
-
-      return arr2;
-    } else {
-      return Array.from(arr);
-    }
-  };
-
   var actionMiddleware = function actionMiddleware(provider) {
       return function (next) {
           return function (action) {
@@ -994,11 +984,14 @@
                   callback = args[1];
 
 
+              var stateUpdate = void 0;
               if (typeof firstArg === 'function') {
-                  _this.pendingState = firstArg(_this.pendingState);
+                  stateUpdate = firstArg(_this.pendingState);
               } else if ((typeof firstArg === 'undefined' ? 'undefined' : _typeof(firstArg)) === 'object' && firstArg !== null) {
-                  _this.pendingState = _extends({}, _this.pendingState, firstArg);
+                  stateUpdate = firstArg;
               }
+
+              _this.pendingState = _extends({}, _this.pendingState, stateUpdate);
 
               // call original setState and catch up with the component's state.
               setReactState(firstArg, function () {
@@ -1007,7 +1000,7 @@
               });
           };
 
-          _this.middleware = combineMiddlewares(_this)([].concat(toConsumableArray(props.middlewares), [actionMiddleware]));
+          _this.middleware = combineMiddlewares(_this)(props.middlewares);
           return _this;
       }
 
@@ -1040,8 +1033,8 @@
   };
   StateProvider.defaultProps = {
       initialState: {},
-      // apply thunk middleware unless custom middlewares are defined
-      middlewares: [thunkMiddleware]
+      // apply default middlewares unless custom middlewares are defined
+      middlewares: [thunkMiddleware, actionMiddleware]
   };
 
   var Container = function (_React$Component) {
