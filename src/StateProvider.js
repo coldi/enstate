@@ -24,8 +24,8 @@ export default class StateProvider extends React.Component {
 
     static defaultProps = {
         initialState: {},
-        // apply thunk middleware unless custom middlewares are defined
-        middlewares: [thunkMiddleware],
+        // apply default middlewares unless custom middlewares are defined
+        middlewares: [thunkMiddleware, actionMiddleware],
     };
 
     constructor (props) {
@@ -57,10 +57,7 @@ export default class StateProvider extends React.Component {
             });
         };
 
-        this.middleware = combineMiddlewares(this)([
-            ...props.middlewares,
-            actionMiddleware,
-        ]);
+        this.middleware = combineMiddlewares(this)(props.middlewares);
     }
 
     provideContext () {
