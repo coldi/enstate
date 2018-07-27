@@ -24,6 +24,12 @@
     "state",
     "context-api"
   ],
+  "scripts": {
+    "build": "npm run clean && node scripts/build.js",
+    "test": "jest",
+    "clean": "rimraf ./dist",
+    "watch": "babel ./src -d dist --ignore __tests__ --watch"
+  },
   "dependencies": {
     "prop-types": "^15.6.2",
     "react": "^16.3.0",
@@ -62,12 +68,6 @@
     "rollup-plugin-node-resolve": "^3.3.0",
     "rollup-plugin-replace": "^2.0.0",
     "rollup-plugin-uglify": "^4.0.0"
-  },
-  "scripts": {
-    "build": "npm run clean && node utils/build.js",
-    "test": "jest",
-    "clean": "rimraf ./dist",
-    "watch": "babel ./src -d dist --ignore __tests__ --watch"
   },
   "peerDependencies": {
     "react": ">=16.3.0",
