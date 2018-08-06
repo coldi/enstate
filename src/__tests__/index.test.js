@@ -13,15 +13,21 @@ jest.mock('../Context', () => ({
 
 describe('StateProvider', () => {
     let renderedElement;
+    let instance;
 
     const renderComponent = (state) => {
         renderedElement = mount(
             <StateProvider initialState={state}>
                 <Context.Consumer>
-                    {(context) => <div state={context.state}>{context.state.test}</div>}
+                    {(context) => (
+                        <div state={context.state}>
+                            {context.state.test}
+                        </div>
+                    )}
                 </Context.Consumer>
             </StateProvider>
         );
+        instance = renderedElement.instance();
     };
 
     describe('Given the component is mounted', () => {
@@ -30,6 +36,11 @@ describe('StateProvider', () => {
         beforeEach(() => {
             mockContext.mockReturnValue({ state: initialState });
             renderComponent(initialState);
+        });
+
+        it('should instantiate proper StateProvider component', () => {
+            expect(typeof instance.getState).toBe('function');
+            expect(typeof instance.dispatch).toBe('function');
         });
 
         it('should render with correct initial state', () => {
