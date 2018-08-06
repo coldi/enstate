@@ -12,12 +12,15 @@ npm i coldi/yansl
 ```
 
 Usage:
-```js
+```
 import React from 'react';
 import { StateProvider, Container } from 'yansl';
 
 const actions = {
-    increment: () => state => ({ count: state.count + 1 }),
+    increment: () => ({
+        type: 'increment',
+        reduce: state => ({ count: state.count + 1 })    
+    }),
 };
 
 function App () {
