@@ -28,9 +28,9 @@
     "start": "parcel examples/index.html",
     "build": "npm run clean && node scripts/build.js",
     "test": "jest",
-    "lint": "eslint src examples",
+    "lint": "eslint src test examples",
     "clean": "rimraf ./dist",
-    "watch": "babel ./src -d dist --ignore __tests__ --watch",
+    "watch": "babel ./src -d dist --watch",
     "preversion": "npm run lint && npm test"
   },
   "dependencies": {},

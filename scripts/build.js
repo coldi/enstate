@@ -9,13 +9,13 @@ const exec = (command, extraEnv) =>
 
 console.log('Building CommonJS modules ...');
 
-exec('babel src -d dist/cjs --ignore __tests__', {
+exec('babel src -d dist/cjs', {
     BABEL_ENV: 'cjs',
 });
 
 console.log('\nBuilding ES modules ...');
 
-exec('babel src -d dist --ignore __tests__', {
+exec('babel src -d dist', {
     BABEL_ENV: 'es',
 });
 
