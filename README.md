@@ -1,5 +1,7 @@
 # yansl
 
+> **y**et **an**other **s**tate (management) **l**ibrary
+
 React state management library using Context API. With selectors, actions and middlewares.
 
 **⚠ Experimental ⚠**
@@ -37,4 +39,9 @@ function App () {
         </StateProvider>
     );
 }
+```
+
+To run the examples locally:
+```
+npm start
 ```
