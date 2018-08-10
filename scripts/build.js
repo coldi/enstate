@@ -15,7 +15,7 @@ exec('babel src -d dist/cjs --ignore __tests__', {
 
 console.log('\nBuilding ES modules ...');
 
-exec('babel src -d dist/es --ignore __tests__', {
+exec('babel src -d dist --ignore __tests__', {
     BABEL_ENV: 'es',
 });
 
