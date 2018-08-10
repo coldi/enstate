@@ -1,12 +1,12 @@
 import React from 'react';
 import { mount } from 'enzyme';
-import StateProvider from '../StateProvider';
-import Context from '../Context';
+import StateProvider from '../src/StateProvider';
+import Context from '../src/Context';
 
 // TODO: avoid mocking context API
 // see: https://github.com/airbnb/enzyme/issues/1509
 const mockContext = jest.fn();
-jest.mock('../Context', () => ({
+jest.mock('../src/Context', () => ({
     Consumer: props => props.children(mockContext()),
     Provider: props => props.children,
 }));

@@ -9,26 +9,26 @@ const exec = (command, extraEnv) =>
 
 console.log('Building CommonJS modules ...');
 
-exec('babel src -d dist/cjs --ignore __tests__', {
+exec('babel src -d dist/cjs', {
     BABEL_ENV: 'cjs',
 });
 
 console.log('\nBuilding ES modules ...');
 
-exec('babel src -d dist/es --ignore __tests__', {
+exec('babel src -d dist', {
     BABEL_ENV: 'es',
 });
 
-console.log('\nBuilding yansl.js ...');
+console.log('\nBuilding enstate.js ...');
 
-exec('rollup -c -f umd -o dist/umd/yansl.js', {
+exec('rollup -c -f umd -o dist/umd/enstate.js', {
     BABEL_ENV: 'umd',
     NODE_ENV: 'development',
 });
 
-console.log('\nBuilding yansl.min.js ...');
+console.log('\nBuilding enstate.min.js ...');
 
-exec('rollup -c -f umd -o dist/umd/yansl.min.js', {
+exec('rollup -c -f umd -o dist/umd/enstate.min.js', {
     BABEL_ENV: 'umd',
     NODE_ENV: 'production',
 });

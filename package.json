@@ -1,5 +1,5 @@
 {
-  "name": "yansl",
+  "name": "enstate",
   "version": "0.1.0",
   "description": "React state management with Context API",
   "main": "dist/cjs/index.js",
@@ -7,11 +7,11 @@
   "author": "Felix Laukel <felix@laukel.com>",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/coldi/yansl/issues"
+    "url": "https://github.com/coldi/enstate/issues"
   },
   "repository": {
     "type": "git",
-    "url": "git+ssh://git@github.com/coldi/yansl.git"
+    "url": "git+ssh://git@github.com/coldi/enstate.git"
   },
   "files": [
     "dist/"
@@ -28,9 +28,9 @@
     "start": "parcel examples/index.html",
     "build": "npm run clean && node scripts/build.js",
     "test": "jest",
-    "lint": "eslint src examples",
+    "lint": "eslint src test examples",
     "clean": "rimraf ./dist",
-    "watch": "babel ./src -d dist --ignore __tests__ --watch",
+    "watch": "babel ./src -d dist --watch",
     "preversion": "npm run lint && npm test"
   },
   "dependencies": {},

@@ -7,7 +7,7 @@ import replace from 'rollup-plugin-replace';
 const config = {
     input: 'src/index.js',
     output: {
-        name: 'yansl',
+        name: 'enstate',
         globals: {
             react: 'React',
         },
