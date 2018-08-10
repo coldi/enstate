@@ -1,6 +1,4 @@
-# yansl
-
-> **y**et **an**other **s**tate (management) **l**ibrary
+# enstate
 
 React state management library using Context API. With selectors, actions and middlewares.
 
@@ -10,13 +8,13 @@ React state management library using Context API. With selectors, actions and mi
 
 Install from GitHub repo:
 ```
-npm i coldi/yansl
+npm i coldi/enstate
 ```
 
 Usage:
 ```
 import React from 'react';
-import { StateProvider, Container } from 'yansl';
+import { StateProvider, Container } from 'enstate';
 
 const actions = {
     increment: () => ({

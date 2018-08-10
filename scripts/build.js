@@ -19,16 +19,16 @@ exec('babel src -d dist --ignore __tests__', {
     BABEL_ENV: 'es',
 });
 
-console.log('\nBuilding yansl.js ...');
+console.log('\nBuilding enstate.js ...');
 
-exec('rollup -c -f umd -o dist/umd/yansl.js', {
+exec('rollup -c -f umd -o dist/umd/enstate.js', {
     BABEL_ENV: 'umd',
     NODE_ENV: 'development',
 });
 
-console.log('\nBuilding yansl.min.js ...');
+console.log('\nBuilding enstate.min.js ...');
 
-exec('rollup -c -f umd -o dist/umd/yansl.min.js', {
+exec('rollup -c -f umd -o dist/umd/enstate.min.js', {
     BABEL_ENV: 'umd',
     NODE_ENV: 'production',
 });
