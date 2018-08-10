@@ -7,10 +7,10 @@ import replace from 'rollup-plugin-replace';
 const config = {
     input: 'src/index.js',
     output: {
-        name: 'Yansl',
+        name: 'yansl',
         globals: {
-            react: 'React'
-        }
+            react: 'React',
+        },
     },
     external: ['react'],
     plugins: [
@@ -20,18 +20,18 @@ const config = {
             plugins: [
                 'external-helpers',
                 'transform-class-properties',
-                'transform-object-rest-spread'
+                'transform-object-rest-spread',
             ],
-            presets: [['env', { modules: false }], 'react']
+            presets: [['env', { modules: false }], 'react'],
         }),
         resolve(),
         commonjs({
-            include: /node_modules/
+            include: /node_modules/,
         }),
         replace({
-            'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV)
-        })
-    ]
+            'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV),
+        }),
+    ],
 };
 
 if (process.env.NODE_ENV === 'production') {
