@@ -1,6 +1,6 @@
 {
   "name": "enstate",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "React state management with Context API",
   "main": "dist/cjs/index.js",
   "module": "dist/index.js",
