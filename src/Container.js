@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Context from './Context';
+import { transformSelectors, transformActions } from './transform';
 
 export default class Container extends React.Component {
 
@@ -9,6 +10,7 @@ export default class Container extends React.Component {
         selectors: PropTypes.shape(),
         actions: PropTypes.shape(),
         onMount: PropTypes.func,
+        onUpdate: PropTypes.func,
         onUnmount: PropTypes.func,
     };
 
@@ -21,31 +23,19 @@ export default class Container extends React.Component {
         if (this.props.onMount) this.props.onMount();
     }
 
+    componentDidUpdate () {
+        if (this.props.onUpdate) this.props.onUpdate();
+    }
+
     componentWillUnmount () {
         if (this.props.onUnmount) this.props.onUnmount();
-    }
-
-    transformSelectors ({ state }) {
-        return Object.entries(this.props.selectors)
-            .reduce((actions, [key, fn]) => ({
-                ...actions,
-                [key]: (...args) => fn(...args)(state),
-            }), {});
-    }
-
-    transformActions ({ dispatch }) {
-        return Object.entries(this.props.actions)
-            .reduce((actions, [key, fn]) => ({
-                ...actions,
-                [key]: (...args) => dispatch(fn(...args)),
-            }), {});
     }
 
     renderChildWithContext = (context) => (
         this.props.children({
             state: context.state,
-            ...this.transformSelectors(context),
-            ...this.transformActions(context),
+            ...transformSelectors(context, this.props.selectors),
+            ...transformActions(context, this.props.actions),
         })
     );
 

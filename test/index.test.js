@@ -1,52 +1,71 @@
 import React from 'react';
-import { mount } from 'enzyme';
+import {
+    render,
+    fireEvent,
+    cleanup
+} from 'react-testing-library';
+import 'jest-dom/extend-expect';
 import StateProvider from '../src/StateProvider';
-import Context from '../src/Context';
+import Container from '../src/Container';
 
-// TODO: avoid mocking context API
-// see: https://github.com/airbnb/enzyme/issues/1509
-const mockContext = jest.fn();
-jest.mock('../src/Context', () => ({
-    Consumer: props => props.children(mockContext()),
-    Provider: props => props.children,
-}));
+// TODO: add test for hook
 
-describe('StateProvider', () => {
-    let renderedElement;
-    let instance;
+describe('Container w/ render props', () => {
+    let document;
+    const actions = {
+        increment: () => ({
+            type: 'increment',
+            reduce: state => ({ count: state.count + 1 }),
+        }),
+    };
 
-    const renderComponent = (state) => {
-        renderedElement = mount(
-            <StateProvider initialState={state}>
-                <Context.Consumer>
-                    {(context) => (
-                        <div state={context.state}>
-                            {context.state.test}
+    afterEach(cleanup);
+
+    const renderTestApp = initialState => {
+        document = render(
+            <StateProvider initialState={initialState}>
+                <Container actions={actions}>
+                    {({ state, increment }) => (
+                        <div>
+                            <span data-testid="counter">{state.count}</span>
+                            <button data-testid="btn" onClick={increment}>Click</button>
                         </div>
                     )}
-                </Context.Consumer>
+                </Container>
             </StateProvider>
         );
-        instance = renderedElement.instance();
     };
 
     describe('Given the component is mounted', () => {
-        const initialState = { test: true };
+        const initialState = { count: 0 };
 
         beforeEach(() => {
-            mockContext.mockReturnValue({ state: initialState });
-            renderComponent(initialState);
-        });
-
-        it('should instantiate proper StateProvider component', () => {
-            expect(typeof instance.getState).toBe('function');
-            expect(typeof instance.dispatch).toBe('function');
+            renderTestApp(initialState);
         });
 
         it('should render with correct initial state', () => {
-            expect(renderedElement.state().test).toBe(true);
-            expect(renderedElement.find('div').length).toBe(1);
-            expect(renderedElement.find('div').prop('state')).toEqual(initialState);
+            expect(document.getByTestId('counter')).toHaveTextContent(0);
+        });
+
+        describe('Given the button gets clicked', () => {
+            beforeEach(() => {
+                fireEvent.click(document.getByTestId('btn'));
+            });
+
+            it('should update state', async () => {
+                expect(document.getByTestId('counter')).toHaveTextContent(1);
+            });
+        });
+
+        describe('Given the button gets clicked 2 times', () => {
+            beforeEach(() => {
+                fireEvent.click(document.getByTestId('btn'));
+                fireEvent.click(document.getByTestId('btn'));
+            });
+
+            it('should update state', async () => {
+                expect(document.getByTestId('counter')).toHaveTextContent(2);
+            });
         });
     });
 });
