@@ -1,17 +1,11 @@
 import React from 'react';
-import {
-    render,
-    fireEvent,
-    cleanup
-} from 'react-testing-library';
 import 'jest-dom/extend-expect';
-import StateProvider from '../src/StateProvider';
+import connectHook from '../src/connectHook';
 import Container from '../src/Container';
+import makeCounterTest from './makeCounterTest';
 
-// TODO: add test for hook
-
-describe('Container w/ render props', () => {
-    let document;
+describe('Basic counter test', () => {
+    const initialState = { count: 0 };
     const actions = {
         increment: () => ({
             type: 'increment',
@@ -19,53 +13,38 @@ describe('Container w/ render props', () => {
         }),
     };
 
-    afterEach(cleanup);
-
-    const renderTestApp = initialState => {
-        document = render(
-            <StateProvider initialState={initialState}>
-                <Container actions={actions}>
-                    {({ state, increment }) => (
-                        <div>
-                            <span data-testid="counter">{state.count}</span>
-                            <button data-testid="btn" onClick={increment}>Click</button>
-                        </div>
-                    )}
-                </Container>
-            </StateProvider>
+    // prepare a component that uses the Container and it's render props
+    function ContainerTest() {
+        return (
+            <Container actions={actions}>
+                {({ state, increment }) => (
+                    <React.Fragment>
+                        <span data-testid="counter">{state.count}</span>
+                        <button data-testid="btn" onClick={increment}>
+                            Click
+                        </button>
+                    </React.Fragment>
+                )}
+            </Container>
         );
-    };
+    }
 
-    describe('Given the component is mounted', () => {
-        const initialState = { count: 0 };
+    // prepare a component that uses a connected hook
+    const useConnect = connectHook({ actions });
 
-        beforeEach(() => {
-            renderTestApp(initialState);
-        });
+    function HookTest() {
+        const { state, increment } = useConnect();
+        return (
+            <React.Fragment>
+                <span data-testid="counter">{state.count}</span>
+                <button data-testid="btn" onClick={increment}>
+                    Click
+                </button>
+            </React.Fragment>
+        );
+    }
 
-        it('should render with correct initial state', () => {
-            expect(document.getByTestId('counter')).toHaveTextContent(0);
-        });
-
-        describe('Given the button gets clicked', () => {
-            beforeEach(() => {
-                fireEvent.click(document.getByTestId('btn'));
-            });
-
-            it('should update state', async () => {
-                expect(document.getByTestId('counter')).toHaveTextContent(1);
-            });
-        });
-
-        describe('Given the button gets clicked 2 times', () => {
-            beforeEach(() => {
-                fireEvent.click(document.getByTestId('btn'));
-                fireEvent.click(document.getByTestId('btn'));
-            });
-
-            it('should update state', async () => {
-                expect(document.getByTestId('counter')).toHaveTextContent(2);
-            });
-        });
-    });
+    // run tests
+    describe('Container w/ render props', makeCounterTest(initialState, ContainerTest));
+    describe('Component that uses hook', makeCounterTest(initialState, HookTest));
 });
