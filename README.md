@@ -128,12 +128,12 @@ and actions via render props.
 
 Selectors are higher order functions that get connected to the state inside the 
 Container component.<br>
-The first function expects (optional) parameters and the second function receives
-the state. When you use the selector via render props the state is already injected.
+The first function receives the state and the second function expects (optional) parameters.
+When you use the selector via render props the state is already injected.
 
 ```js
 const selectors = {
-    getUserById: id => state => state.users[id]   
+    getUserById: state => id => state.users[id]
 };
 
 ...

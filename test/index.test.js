@@ -6,6 +6,9 @@ import makeCounterTest from './makeCounterTest';
 
 describe('Basic counter test', () => {
     const initialState = { count: 0 };
+    const selectors = {
+        getCount: state => () => state.count,
+    };
     const actions = {
         increment: () => ({
             type: 'increment',
@@ -16,10 +19,10 @@ describe('Basic counter test', () => {
     // prepare a component that uses the Container and it's render props
     function ContainerTest() {
         return (
-            <Container actions={actions}>
-                {({ state, increment }) => (
+            <Container selectors={selectors} actions={actions}>
+                {({ getCount, increment }) => (
                     <React.Fragment>
-                        <span data-testid="counter">{state.count}</span>
+                        <span data-testid="counter">{getCount()}</span>
                         <button data-testid="btn" onClick={increment}>
                             Click
                         </button>
@@ -30,13 +33,13 @@ describe('Basic counter test', () => {
     }
 
     // prepare a component that uses a connected hook
-    const useConnect = connectHook({ actions });
+    const useConnect = connectHook({ selectors, actions });
 
     function HookTest() {
-        const { state, increment } = useConnect();
+        const { getCount, increment } = useConnect();
         return (
             <React.Fragment>
-                <span data-testid="counter">{state.count}</span>
+                <span data-testid="counter">{getCount()}</span>
                 <button data-testid="btn" onClick={increment}>
                     Click
                 </button>
