@@ -2,6 +2,8 @@
 
 React state management library using Context API. With selectors, actions and middlewares.
 
+Supports React hooks as well.
+
 **⚠ Experimental ⚠**
 
 ## Getting started
@@ -15,15 +17,14 @@ npm install enstate
 yarn add enstate
 ```
 
-Usage:
+Usage with render props:
 ```js
-import React from 'react';
 import { StateProvider, Container } from 'enstate';
 
 const actions = {
     increment: () => ({
         type: 'increment',
-        reduce: state => ({ count: state.count + 1 })    
+        reduce: state => ({ count: state.count + 1 })
     }),
 };
 
@@ -38,6 +39,28 @@ function App () {
                     )}
                 </Container>
             </div>
+        </StateProvider>
+    );
+}
+```
+
+Usage with hooks:
+```js
+import { StateProvider, connectHook } from 'enstate';
+
+// using actions from above example ...
+
+const useConnect = connectHook({ actions });
+
+function HookExample () {
+    const { state, increment } = useConnect();
+    return <button onClick={increment}>Update state ({state.count})</button>;
+}
+
+function App () {
+    return (
+        <StateProvider initialState={{ count: 0 }}>
+            <HookExample />
         </StateProvider>
     );
 }
@@ -84,7 +107,7 @@ const persistenceMiddleware = provider => next => action => {
     if (typeof action === 'object') {
         localStorage.setItem('appState', JSON.stringify(provider.getState()));
     }
-    
+
     return next(action);
 };
 
