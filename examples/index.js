@@ -5,7 +5,7 @@ import { StateProvider, Container, connectHook } from '../src';
 const actions = {
     increment: () => ({
         type: 'increment',
-        reduce: state => ({ count: state.count + 1 }),
+        update: state => ({ count: state.count + 1 }),
     }),
 };
 

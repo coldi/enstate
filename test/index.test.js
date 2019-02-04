@@ -12,7 +12,7 @@ describe('Basic counter test', () => {
     const actions = {
         increment: () => ({
             type: 'increment',
-            reduce: state => ({ count: state.count + 1 }),
+            update: state => ({ count: state.count + 1 }),
         }),
     };
 

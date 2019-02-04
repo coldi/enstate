@@ -24,7 +24,7 @@ import { StateProvider, Container } from 'enstate';
 const actions = {
     increment: () => ({
         type: 'increment',
-        reduce: state => ({ count: state.count + 1 })
+        update: state => ({ count: state.count + 1 })
     }),
 };
 
@@ -127,7 +127,7 @@ const App = () => (
 The package comes with the following middlewares out of the box:
 
 **`actionMiddleware`**<br>
-Expects dispatched action objects with a `type` string and a `reduce` function.
+Expects dispatched action objects with a `type` string and an `update` function.
 
 **`thunkMiddleware`**<br>
 Expects dispatched functions for handling side effects (like data fetching and other async stuff).
@@ -170,13 +170,13 @@ const selectors = {
 
 Actions can be everything that your middlewares can work with. Most common usage is with objects.<br>
 When you use the default `actionMiddleware` the object should contain a `type` string and
-a `reduce` function. This function receives the state and should return a new state.
+a `update` function. This function receives the state and should return a new state.
 
 ```js
 const actions = {
     increment: () => ({
         type: 'increment',
-        reduce: state => ({ count: state.count + 1 })    
+        update: state => ({ count: state.count + 1 })
     }),
 };
 

@@ -1,6 +1,6 @@
 const actionMiddleware = provider => next => action => {
     if (typeof action === 'object') {
-        provider.setState(action.reduce || action);
+        provider.setState(action.update || action);
         return action;
     }
 
